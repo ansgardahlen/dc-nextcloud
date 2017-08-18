@@ -17,18 +17,18 @@ services:
             - OPCACHE_MEM_SIZE=128
             - CRON_PERIOD=15m
             - TZ=Europe/Berlin
-            - ADMIN_USER=admin
-            - ADMIN_PASSWORD=X4doSwwVcyKckNWhFsOMh0b7iI2G
-            - DOMAIN=localhost
+            - ADMIN_USER=${NEXTCLOUD_ADMIN}
+            - ADMIN_PASSWORD=${NEXTCLOUD_PASS}
+            - DOMAIN=${NEXTCLOUD_HOSTNAME}
             - DB_TYPE=mysql
-            - DB_NAME=nextcloud
-            - DB_USER=nextcloud
-            - DB_PASSWORD=PkzXzWYwv5FepfBFwgfgzr3dOZnI
+            - DB_NAME=DBNAME
+            - DB_USER=DBUSER
+            - DB_PASSWORD=DBPASS
             - DB_HOST=nextcloud-db
             - VIRTUAL_HOST=${NEXTCLOUD_HOSTNAME}
-            - VIRTUAL_PORT=${HTTP_PORT:8888}
-            - LETSENCRYPT_HOST=${GOGS_HOSTNAME}
-            - LETSENCRYPT_EMAIL=${GOGS_ADMIN_MAIL}
+            - VIRTUAL_PORT=${HTTP_PORT:-8888}
+            - LETSENCRYPT_HOST=${NEXTCLOUD_HOSTNAME}
+            - LETSENCRYPT_EMAIL=${NEXTNEXTCLOUD_ADMIN_MAIL}
           volumes:
             - /mnt/nextcloud/data:/data
             - /mnt/nextcloud/config:/config
