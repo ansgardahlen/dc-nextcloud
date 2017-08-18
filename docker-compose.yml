@@ -19,7 +19,7 @@ services:
             - TZ=Europe/Berlin
             - ADMIN_USER=${NEXTCLOUD_ADMIN}
             - ADMIN_PASSWORD=${NEXTCLOUD_PASS}
-            - DOMAIN=${NEXTCLOUD_HOSTNAME}
+            - DOMAIN=localhost
             - DB_TYPE=mysql
             - DB_NAME=DBNAME
             - DB_USER=DBUSER
@@ -48,10 +48,10 @@ services:
           volumes:
             - /mnt/nextcloud/db:/var/lib/mysql
           environment:
-            - MYSQL_ROOT_PASSWORD=b2jVTgnXwSn3boxCqtoxr4gL3MJg
-            - MYSQL_DATABASE=nextcloud
-            - MYSQL_USER=nextcloud
-            - MYSQL_PASSWORD=PkzXzWYwv5FepfBFwgfgzr3dOZnI
+            - MYSQL_ROOT_PASSWORD=${DBROOT}
+            - MYSQL_DATABASE=${DBNAME}
+            - MYSQL_USER=${DBUSER}
+            - MYSQL_PASSWORD=${DBPASS}
 
         # If using Nextant
         solr:
