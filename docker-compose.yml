@@ -56,7 +56,6 @@ services:
         # If using Nextant
         solr:
           image: solr:6-alpine
-          container_name: solr
           volumes:
             - /mnt/docker/solr:/opt/solr/server/solr/mycores
           entrypoint:
@@ -67,6 +66,5 @@ services:
         # If using Redis
         redis:
           image: redis:alpine
-          container_name: redis
           volumes:
             - /mnt/docker/redis:/data
