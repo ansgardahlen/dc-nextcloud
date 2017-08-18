@@ -54,19 +54,19 @@ services:
             - MYSQL_PASSWORD=PkzXzWYwv5FepfBFwgfgzr3dOZnI
 
         # If using Nextant
-        solr:
-          image: solr:6-alpine
-          container_name: solr
-          volumes:
-            - /mnt/docker/solr:/opt/solr/server/solr/mycores
-          entrypoint:
-            - docker-entrypoint.sh
-            - solr-precreate
-            - nextant
+#        solr:
+#          image: solr:6-alpine
+#          container_name: solr
+#          volumes:
+#            - /mnt/docker/solr:/opt/solr/server/solr/mycores
+#          entrypoint:
+#            - docker-entrypoint.sh
+#            - solr-precreate
+#            - nextant
 
         # If using Redis
-        redis:
-          image: redis:alpine
-          container_name: redis
-          volumes:
-            - /mnt/docker/redis:/data
+#        redis:
+#          image: redis:alpine
+#          container_name: redis
+#          volumes:
+#            - /mnt/docker/redis:/data
