@@ -1,0 +1,72 @@
+version: "2.1"
+services:
+        nextcloud:
+          image: wonderfall/nextcloud
+          depends_on:
+            nextcloud-db:
+              condition: service_healthy
+          links:
+            - nextcloud-db:nextcloud-db   # If using MySQL
+            - solr:solr                   # If using Nextant
+            - redis:redis                 # If using Redis
+          environment:
+            - UID=1000
+            - GID=1000
+            - UPLOAD_MAX_SIZE=10G
+            - APC_SHM_SIZE=128M
+            - OPCACHE_MEM_SIZE=128
+            - CRON_PERIOD=15m
+            - TZ=Europe/Berlin
+            - ADMIN_USER=admin
+            - ADMIN_PASSWORD=X4doSwwVcyKckNWhFsOMh0b7iI2G
+            - DOMAIN=localhost
+            - DB_TYPE=mysql
+            - DB_NAME=nextcloud
+            - DB_USER=nextcloud
+            - DB_PASSWORD=PkzXzWYwv5FepfBFwgfgzr3dOZnI
+            - DB_HOST=nextcloud-db
+            - VIRTUAL_HOST=${NEXTCLOUD_HOSTNAME}
+            - VIRTUAL_PORT=${HTTP_PORT:8888}
+            - LETSENCRYPT_HOST=${GOGS_HOSTNAME}
+            - LETSENCRYPT_EMAIL=${GOGS_ADMIN_MAIL}
+          volumes:
+            - /mnt/nextcloud/data:/data
+            - /mnt/nextcloud/config:/config
+            - /mnt/nextcloud/apps:/apps2
+            - /mnt/nextcloud/themes:/nextcloud/themes
+#          ports:
+#             - "${HTTP_BIND:-0.0.0.0}:${HTTP_PORT:-8888}:${HTTP_PORT:-8888}"
+
+        # If using MySQL
+        nextcloud-db:
+          image: mariadb:10
+          healthcheck:
+            test: ["CMD", "mysqladmin", "ping", "--host", "localhost", "--silent"]
+            interval: 5s
+            timeout: 5s
+            retries: 10
+          volumes:
+            - /mnt/nextcloud/db:/var/lib/mysql
+          environment:
+            - MYSQL_ROOT_PASSWORD=b2jVTgnXwSn3boxCqtoxr4gL3MJg
+            - MYSQL_DATABASE=nextcloud
+            - MYSQL_USER=nextcloud
+            - MYSQL_PASSWORD=PkzXzWYwv5FepfBFwgfgzr3dOZnI
+
+        # If using Nextant
+        solr:
+          image: solr:6-alpine
+          container_name: solr
+          volumes:
+            - /mnt/docker/solr:/opt/solr/server/solr/mycores
+          entrypoint:
+            - docker-entrypoint.sh
+            - solr-precreate
+            - nextant
+
+        # If using Redis
+        redis:
+          image: redis:alpine
+          container_name: redis
+          volumes:
+            - /mnt/docker/redis:/data
