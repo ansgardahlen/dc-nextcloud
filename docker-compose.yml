@@ -28,7 +28,7 @@ services:
             - VIRTUAL_HOST=${NEXTCLOUD_HOSTNAME}
             - VIRTUAL_PORT=${HTTP_PORT:-8888}
             - LETSENCRYPT_HOST=${NEXTCLOUD_HOSTNAME}
-            - LETSENCRYPT_EMAIL=${NEXTNEXTCLOUD_ADMIN_MAIL}
+            - LETSENCRYPT_EMAIL=${NEXTCLOUD_ADMIN_MAIL}
           volumes:
             - /mnt/nextcloud/data:/data
             - /mnt/nextcloud/config:/config
