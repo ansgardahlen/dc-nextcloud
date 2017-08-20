@@ -1,4 +1,4 @@
-version: "2.1"
+version: "2.2"
 services:
         nextcloud:
           image: wonderfall/nextcloud
@@ -21,9 +21,9 @@ services:
             - ADMIN_PASSWORD=${NEXTCLOUD_PASS}
             - DOMAIN=localhost
             - DB_TYPE=mysql
-            - DB_NAME=DBNAME
-            - DB_USER=DBUSER
-            - DB_PASSWORD=DBPASS
+            - DB_NAME=${DBNAME}
+            - DB_USER=${DBUSER}
+            - DB_PASSWORD=${DBPASS}
             - DB_HOST=nextcloud-db
             - VIRTUAL_HOST=${NEXTCLOUD_HOSTNAME}
             - VIRTUAL_PORT=${HTTP_PORT:-8888}
@@ -34,8 +34,8 @@ services:
             - /mnt/nextcloud/config:/config
             - /mnt/nextcloud/apps:/apps2
             - /mnt/nextcloud/themes:/nextcloud/themes
-#          ports:
-#             - "${HTTP_BIND:-0.0.0.0}:${HTTP_PORT:-8888}:${HTTP_PORT:-8888}"
+          ports:
+             - "${HTTP_BIND:-0.0.0.0}:${HTTP_PORT:-8888}:${HTTP_PORT:-8888}"
 
         # If using MySQL
         nextcloud-db:
