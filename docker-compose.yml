@@ -2,13 +2,14 @@ version: "2.2"
 services:
         nextcloud:
           image: wonderfall/nextcloud
+          container_name: nc_nextcloud
           depends_on:
             nextcloud-db:
               condition: service_healthy
           links:
-            - nextcloud-db:nextcloud-db   # If using MySQL
-            - solr:solr                   # If using Nextant
-            - redis:redis                 # If using Redis
+            - nextcloud-db:nc_db             # If using MySQL
+            - solr:nc_solr                   # If using Nextant
+            - redis:nc_redis                 # If using Redis
           environment:
             - UID=1000
             - GID=1000
@@ -19,34 +20,35 @@ services:
             - TZ=Europe/Berlin
             - ADMIN_USER=${NEXTCLOUD_ADMIN}
             - ADMIN_PASSWORD=${NEXTCLOUD_PASS}
-            - DOMAIN=localhost
+            - DOMAIN=${NEXTCLOUD_HOSTNAME}
             - DB_TYPE=mysql
             - DB_NAME=${DBNAME}
             - DB_USER=${DBUSER}
             - DB_PASSWORD=${DBPASS}
-            - DB_HOST=nextcloud-db
+            - DB_HOST=nc_db
             - VIRTUAL_HOST=${NEXTCLOUD_HOSTNAME}
             - VIRTUAL_PORT=${HTTP_PORT:-8888}
             - LETSENCRYPT_HOST=${NEXTCLOUD_HOSTNAME}
             - LETSENCRYPT_EMAIL=${NEXTCLOUD_ADMIN_MAIL}
           volumes:
-            - /mnt/nextcloud/data:/data
-            - /mnt/nextcloud/config:/config
-            - /mnt/nextcloud/apps:/apps2
-            - /mnt/nextcloud/themes:/nextcloud/themes
+            - ./data/nextcloud/data:/data
+            - ./data/nextcloud/config:/config
+            - ./data/nextcloud/apps:/apps2
+            - ./data/nextcloud/themes:/nextcloud/themes
           ports:
              - "${HTTP_BIND:-0.0.0.0}:${HTTP_PORT:-8888}:${HTTP_PORT:-8888}"
 
         # If using MySQL
         nextcloud-db:
           image: mariadb:10
+          container_name: nc_db
           healthcheck:
             test: ["CMD", "mysqladmin", "ping", "--host", "localhost", "--silent"]
             interval: 5s
             timeout: 5s
             retries: 10
           volumes:
-            - /mnt/nextcloud/db:/var/lib/mysql
+            - ./data/nextcloud/db:/var/lib/mysql
           environment:
             - MYSQL_ROOT_PASSWORD=${DBROOT}
             - MYSQL_DATABASE=${DBNAME}
@@ -56,8 +58,9 @@ services:
         # If using Nextant
         solr:
           image: solr:6-alpine
+          container_name: nc_solr
           volumes:
-            - /mnt/docker/solr:/opt/solr/server/solr/mycores
+            - ./data/solr:/opt/solr/server/solr/mycores
           entrypoint:
             - docker-entrypoint.sh
             - solr-precreate
@@ -66,5 +69,6 @@ services:
         # If using Redis
         redis:
           image: redis:alpine
+          container_name: nc_redis
           volumes:
-            - /mnt/docker/redis:/data
+            - ./data/redis:/data
