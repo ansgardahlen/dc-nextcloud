@@ -41,7 +41,7 @@ cat << EOF > nextcloud.conf
 NEXTCLOUD_HOSTNAME=${NEXTCLOUD_HOSTNAME}
 
 # ------------------------------
-# GOGS admin user
+# NEXTCLOUD admin user
 # ------------------------------
 NEXTCLOUD_ADMIN=nextcloudadmin
 NEXTCLOUD_ADMIN_MAIL=${NEXTCLOUD_ADMIN_MAIL}
