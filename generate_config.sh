@@ -12,12 +12,12 @@ if [[ -f nextcloud.conf ]]; then
   esac
 fi
 
-if [ -z "$NEXTCLOUD_HOSTNAME" ]; then
-  read -p "Hostname (FQDN): " -ei "nextcloud.example.org" NEXTCLOUD_HOSTNAME
+if [ -z "$PUBLIC_FQDN" ]; then
+  read -p "Hostname (FQDN): " -ei "nextcloud.example.org" PUBLIC_FQDN
 fi
 
-if [ -z "$NEXTCLOUD_ADMIN_MAIL" ]; then
-  read -p "Nextcloud admin Mail address: " -ei "mail@example.com" NEXTCLOUD_ADMIN_MAIL
+if [ -z "$ADMIN_MAIL" ]; then
+  read -p "Nextcloud admin Mail address: " -ei "mail@example.com" ADMIN_MAIL
 fi
 
 [[ -f /etc/timezone ]] && TZ=$(cat /etc/timezone)
@@ -38,13 +38,13 @@ cat << EOF > nextcloud.conf
 # nextcloud web ui configuration
 # ------------------------------
 # example.org is _not_ a valid hostname, use a fqdn here.
-NEXTCLOUD_HOSTNAME=${NEXTCLOUD_HOSTNAME}
+PUBLIC_FQDN=${PUBLIC_FQDN}
 
 # ------------------------------
 # NEXTCLOUD admin user
 # ------------------------------
 NEXTCLOUD_ADMIN=nextcloudadmin
-NEXTCLOUD_ADMIN_MAIL=${NEXTCLOUD_ADMIN_MAIL}
+ADMIN_MAIL=${ADMIN_MAIL}
 NEXTCLOUD_PASS=$(</dev/urandom tr -dc A-Za-z0-9 | head -c 28)
 
 # ------------------------------

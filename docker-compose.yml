@@ -20,16 +20,16 @@ services:
             - TZ=Europe/Berlin
             - ADMIN_USER=${NEXTCLOUD_ADMIN}
             - ADMIN_PASSWORD=${NEXTCLOUD_PASS}
-            - DOMAIN=${NEXTCLOUD_HOSTNAME}
+            - DOMAIN=${PUBLIC_FQDN}
             - DB_TYPE=mysql
             - DB_NAME=${DBNAME}
             - DB_USER=${DBUSER}
             - DB_PASSWORD=${DBPASS}
             - DB_HOST=dc_nextcloud_db
-            - VIRTUAL_HOST=${NEXTCLOUD_HOSTNAME}
+            - VIRTUAL_HOST=${PUBLIC_FQDN}
             - VIRTUAL_PORT=${HTTP_PORT:-8888}
-            - LETSENCRYPT_HOST=${NEXTCLOUD_HOSTNAME}
-            - LETSENCRYPT_EMAIL=${NEXTCLOUD_ADMIN_MAIL}
+            - LETSENCRYPT_HOST=${PUBLIC_FQDN}
+            - LETSENCRYPT_EMAIL=${ADMIN_MAIL}
           volumes:
             - ./data/nextcloud/data:/data
             - ./data/nextcloud/config:/config
