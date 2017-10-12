@@ -2,14 +2,14 @@ version: "2.2"
 services:
         nextcloud:
           image: wonderfall/nextcloud
-          container_name: nc_nextcloud
+          container_name: dc_nextcloud
           depends_on:
             nextcloud-db:
               condition: service_healthy
           links:
-            - nextcloud-db:nc_db             # If using MySQL
-            - solr:nc_solr                   # If using Nextant
-            - redis:nc_redis                 # If using Redis
+            - nextcloud-db:dc_nextcloud_db             # If using MySQL
+            - solr:dc_solr                   # If using Nextant
+            - redis:dc_redis                 # If using Redis
           environment:
             - UID=1000
             - GID=1000
@@ -25,7 +25,7 @@ services:
             - DB_NAME=${DBNAME}
             - DB_USER=${DBUSER}
             - DB_PASSWORD=${DBPASS}
-            - DB_HOST=nc_db
+            - DB_HOST=dc_nextcloud_db
             - VIRTUAL_HOST=${NEXTCLOUD_HOSTNAME}
             - VIRTUAL_PORT=${HTTP_PORT:-8888}
             - LETSENCRYPT_HOST=${NEXTCLOUD_HOSTNAME}
@@ -35,13 +35,13 @@ services:
             - ./data/nextcloud/config:/config
             - ./data/nextcloud/apps:/apps2
             - ./data/nextcloud/themes:/nextcloud/themes
-          ports:
-             - "${HTTP_BIND:-0.0.0.0}:${HTTP_PORT:-8888}:${HTTP_PORT:-8888}"
+#          ports:
+#             - "${HTTP_BIND:-0.0.0.0}:${HTTP_PORT:-8888}:${HTTP_PORT:-8888}"
 
         # If using MySQL
         nextcloud-db:
           image: mariadb:10
-          container_name: nc_db
+          container_name: dc_nextcloud_db
           healthcheck:
             test: ["CMD", "mysqladmin", "ping", "--host", "localhost", "--silent"]
             interval: 5s
@@ -58,7 +58,7 @@ services:
         # If using Nextant
         solr:
           image: solr:6-alpine
-          container_name: nc_solr
+          container_name: dc_nextcloud_solr
           volumes:
             - ./data/solr:/opt/solr/server/solr/mycores
           entrypoint:
@@ -69,6 +69,6 @@ services:
         # If using Redis
         redis:
           image: redis:alpine
-          container_name: nc_redis
+          container_name: dc_nextcloud_redis
           volumes:
             - ./data/redis:/data
