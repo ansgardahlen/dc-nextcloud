@@ -55,16 +55,16 @@ services:
             - MYSQL_USER=${DBUSER}
             - MYSQL_PASSWORD=${DBPASS}
 
-        # If using Nextant
-        solr:
-          image: solr:6-alpine
-          container_name: dc_nextcloud_solr
-          volumes:
-            - ./data/solr:/opt/solr/server/solr/mycores
-          entrypoint:
-            - docker-entrypoint.sh
-            - solr-precreate
-            - nextant
+#        # If using Nextant
+#        solr:
+#          image: solr:6-alpine
+#          container_name: dc_nextcloud_solr
+#          volumes:
+#            - ./data/solr:/opt/solr/server/solr/mycores
+#          entrypoint:
+#            - docker-entrypoint.sh
+#            - solr-precreate
+#            - nextant
 
         # If using Redis
         redis:
