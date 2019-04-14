@@ -1,7 +1,7 @@
 version: "2.2"
 services:
         nextcloud:
-          image: wonderfall/nextcloud
+          image: nextcloud:production
           container_name: dc_nextcloud
           depends_on:
             nextcloud-db:
@@ -18,23 +18,26 @@ services:
             - OPCACHE_MEM_SIZE=128
             - CRON_PERIOD=15m
             - TZ=Europe/Berlin
-            - ADMIN_USER=${NEXTCLOUD_ADMIN}
-            - ADMIN_PASSWORD=${NEXTCLOUD_PASS}
-            - DOMAIN=${PUBLIC_FQDN}
-            - DB_TYPE=mysql
-            - DB_NAME=${DBNAME}
-            - DB_USER=${DBUSER}
-            - DB_PASSWORD=${DBPASS}
-            - DB_HOST=dc_nextcloud_db
+            - NEXTCLOUD_ADMIN_USER=${NEXTCLOUD_ADMIN}
+            - NEXTCLOUD_ADMIN_PASSWORD=${NEXTCLOUD_PASS}
+            - NEXTCLOUD_TRUSTED_DOMAINS=${PUBLIC_FQDN}
+            - MYSQL_DATABASE=${DBNAME}
+            - MYSQL_USER=${DBUSER}
+            - MYSQL_PASSWORD=${DBPASS}
+            - MYSQL_HOST=dc_nextcloud_db
+            - REDIS_HOST=dc_redis
+            - REDIS_HOST_PORT=6379
             - VIRTUAL_HOST=${PUBLIC_FQDN}
             - VIRTUAL_PORT=${HTTP_PORT:-8888}
             - LETSENCRYPT_HOST=${PUBLIC_FQDN}
             - LETSENCRYPT_EMAIL=${ADMIN_MAIL}
           volumes:
-            - ./data/nextcloud/data:/data
-            - ./data/nextcloud/config:/config
-            - ./data/nextcloud/apps:/apps2
-            - ./data/nextcloud/themes:/nextcloud/themes
+            - ./data/nextcloud/html:/var/www/html
+            - ./data/nextcloud/config:/var/www/html/config
+            - ./data/nextcloud/custom_apps:/var/www/html/custom_apps
+            - ./data/nextcloud/data:/var/www/html/data
+            - ./data/nextcloud/themes:/var/www/html/themes
+            - /etc/localtime:/etc/localtime:ro
 #          ports:
 #             - "${HTTP_BIND:-0.0.0.0}:${HTTP_PORT:-8888}:${HTTP_PORT:-8888}"
 
@@ -48,7 +51,7 @@ services:
             timeout: 5s
             retries: 10
           volumes:
-            - ./data/nextcloud/db:/var/lib/mysql
+            - ./data/mariadb:/var/lib/mysql
           environment:
             - MYSQL_ROOT_PASSWORD=${DBROOT}
             - MYSQL_DATABASE=${DBNAME}
